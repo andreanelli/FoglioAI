@@ -1,51 +1,43 @@
-"""Visual model module."""
+"""Visual model."""
+from datetime import datetime
 from enum import Enum
-from typing import Any, Dict, Optional
+from typing import Dict, Optional
+from uuid import UUID, uuid4
 
-from pydantic import Field, field_validator
-
-from app.models.base import BaseModelWithId
+from pydantic import BaseModel, Field
 
 
 class VisualType(str, Enum):
-    """Type of visual asset."""
+    """Visual type."""
 
     CHART = "chart"
     IMAGE = "image"
 
 
-class Visual(BaseModelWithId):
-    """Visual model for managing generated images and charts."""
+class Visual(BaseModel):
+    """Visual model."""
 
-    type: VisualType
-    source: Dict[str, Any] = Field(
-        ..., description="Source data for charts or prompt for images"
+    id: UUID = Field(default_factory=uuid4, description="Unique ID")
+    type: VisualType = Field(..., description="Type of visual")
+    source_data: Dict = Field(
+        ..., description="Source data or prompt used to generate the visual"
     )
-    content: str = Field(
-        ..., description="Base64 encoded image data or URL to the generated content"
+    generated_content: str = Field(
+        ..., description="Generated content (base64 or URL)"
     )
-    caption: str = Field(..., description="Descriptive caption for the visual")
-    alt_text: str = Field(..., description="Accessibility text for the visual")
-    width: Optional[int] = Field(None, description="Width in pixels")
-    height: Optional[int] = Field(None, description="Height in pixels")
-    format: str = Field("png", description="File format of the visual")
-
-    @field_validator("content")
-    @classmethod
-    def validate_content(cls, v: str) -> str:
-        """Validate content is either a valid URL or base64 data.
-
-        Args:
-            v (str): Content value to validate
-
-        Returns:
-            str: Validated content value
-
-        Raises:
-            ValueError: If content is neither a valid URL nor base64 data
-        """
-        # TODO: Add validation for URL and base64 data
-        return v
+    caption: str = Field(..., description="Visual caption")
+    alt_text: str = Field(..., description="Alt text for accessibility")
+    created_at: datetime = Field(
+        default_factory=datetime.utcnow, description="Creation timestamp"
+    )
+    width: Optional[int] = Field(None, description="Visual width in pixels")
+    height: Optional[int] = Field(None, description="Visual height in pixels")
+    mime_type: str = Field(
+        default="image/png", description="MIME type of the visual"
+    )
+    metadata: Dict = Field(
+        default_factory=dict, description="Additional metadata"
+    )
 
     class Config:
         """Pydantic model configuration."""

@@ -1,83 +1,67 @@
-"""Article model module."""
-from typing import Dict, List, Optional
+"""Article model."""
+from datetime import datetime
+from typing import List, Optional
 from uuid import UUID
 
-from pydantic import Field, field_validator
-
-from app.models.agent import AgentRole
-from app.models.base import ArticleStatus, BaseModelWithId
+from pydantic import BaseModel, Field
 
 
-class ArticleRun(BaseModelWithId):
-    """Article run model for managing article generation."""
+class ArticleSection(BaseModel):
+    """Article section model."""
 
-    status: ArticleStatus = Field(default=ArticleStatus.PENDING)
-    query: str = Field(..., description="User's original query or topic")
-    output: Optional[str] = Field(None, description="Final generated article content")
-    html_output: Optional[str] = Field(None, description="Final article content in HTML format")
-    memos: List[UUID] = Field(
-        default_factory=list,
-        description="List of agent memo IDs in this article run",
-    )
-    citations: List[UUID] = Field(
-        default_factory=list,
-        description="List of citation IDs used in this article",
-    )
-    visuals: List[UUID] = Field(
-        default_factory=list,
-        description="List of visual IDs used in this article",
-    )
-    agent_assignments: Dict[AgentRole, bool] = Field(
-        default_factory=dict,
-        description="Map of agent roles to their completion status",
-    )
-    error: Optional[str] = Field(None, description="Error message if status is FAILED")
-    metadata: dict = Field(
-        default_factory=dict,
-        description="Additional metadata about the article run",
+    title: str = Field(..., description="Section title")
+    content: str = Field(default="", description="Section content")
+    style_notes: Optional[str] = Field(None, description="Style notes for this section")
+
+
+class ArticleOutline(BaseModel):
+    """Article outline model."""
+
+    headline: str = Field(..., description="Article headline")
+    subheadline: Optional[str] = Field(None, description="Article subheadline")
+    sections: List[ArticleSection] = Field(
+        default_factory=list, description="Article sections"
     )
 
-    @field_validator("agent_assignments")
-    @classmethod
-    def validate_agent_assignments(cls, v: Dict[AgentRole, bool]) -> Dict[AgentRole, bool]:
-        """Ensure all required agents are assigned.
 
-        Args:
-            v (Dict[AgentRole, bool]): Agent assignments map
+class Article(BaseModel):
+    """Article model."""
 
-        Returns:
-            Dict[AgentRole, bool]: Validated agent assignments
-        """
-        # Initialize with all agents as not completed
-        default_assignments = {role: False for role in AgentRole}
-        default_assignments.update(v)
-        return default_assignments
+    id: UUID = Field(..., description="Unique identifier for the article")
+    title: str = Field(..., description="Article title")
+    content: str = Field(..., description="Article content in markdown format")
+    topic: str = Field(..., description="Topic the article is about")
+    sources: List[str] = Field(default_factory=list, description="List of sources used")
+    outline: Optional[ArticleOutline] = Field(None, description="Article outline")
+    created_at: datetime = Field(
+        default_factory=datetime.utcnow, description="When the article was created"
+    )
+    updated_at: datetime = Field(
+        default_factory=datetime.utcnow, description="When the article was last updated"
+    )
 
     class Config:
         """Pydantic model configuration."""
 
         json_schema_extra = {
             "example": {
-                "status": "in_progress",
-                "query": "Analyze the impact of AI on global economics in 2024",
-                "memos": [
-                    "123e4567-e89b-12d3-a456-426614174001",
-                    "123e4567-e89b-12d3-a456-426614174002",
-                ],
-                "citations": [
-                    "123e4567-e89b-12d3-a456-426614174003",
-                    "123e4567-e89b-12d3-a456-426614174004",
-                ],
-                "visuals": ["123e4567-e89b-12d3-a456-426614174005"],
-                "agent_assignments": {
-                    "economist": True,
-                    "politics_neutral": False,
-                    "editor": False,
+                "id": "123e4567-e89b-12d3-a456-426614174000",
+                "title": "The Impact of AI on Global Economics",
+                "content": "This article discusses the impact of AI on global economics...",
+                "topic": "AI and its impact on global economics",
+                "sources": ["https://example.com/article1", "https://example.com/article2"],
+                "outline": {
+                    "headline": "AI Revolution Reshapes Global Economic Landscape",
+                    "subheadline": "Experts Predict Unprecedented Changes in Industry and Commerce",
+                    "sections": [
+                        {
+                            "title": "Introduction",
+                            "content": "The dawn of artificial intelligence...",
+                            "style_notes": "Opening in classic 1920s newspaper style"
+                        }
+                    ]
                 },
-                "metadata": {
-                    "estimated_completion_time": "2024-03-01T15:30:00Z",
-                    "word_count": 1200,
-                    "complexity_score": 0.75,
-                },
+                "created_at": "2024-02-15T10:00:00",
+                "updated_at": "2024-02-15T10:00:00"
             }
         } 

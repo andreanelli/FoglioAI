@@ -2,6 +2,7 @@
 from functools import lru_cache
 from typing import Optional
 
+import redis
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -36,4 +37,24 @@ def get_settings() -> Settings:
     Returns:
         Settings: Application settings instance
     """
-    return Settings() 
+    return Settings()
+
+
+def get_redis_client() -> redis.Redis:
+    """Get Redis client instance.
+
+    Returns:
+        redis.Redis: Redis client instance
+    """
+    settings = get_settings()
+    return redis.Redis(
+        host=settings.redis_host,
+        port=settings.redis_port,
+        db=settings.redis_db,
+        password=settings.redis_password,
+        decode_responses=True,
+    )
+
+
+# Export settings instance
+settings = get_settings() 
