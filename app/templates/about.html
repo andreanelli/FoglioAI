@@ -1,0 +1,184 @@
+{% extends "base.html" %}
+
+{% block title %}About FoglioAI - Vintage Newspaper Article Generator{% endblock %}
+
+{% block head %}
+<style>
+    .about-content {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .about-section {
+        margin-bottom: 3rem;
+    }
+    
+    .about-section h2 {
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+        text-align: center;
+        border-bottom: 2px solid var(--color-border);
+        padding-bottom: 0.5rem;
+    }
+    
+    .about-section p {
+        margin-bottom: 1.2rem;
+        font-size: 1.1rem;
+        line-height: 1.7;
+    }
+    
+    .agent-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+        margin-top: 2rem;
+    }
+    
+    .agent-card {
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+        background-color: #fcfbf8;
+    }
+    
+    .agent-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+        border-bottom: 1px solid var(--color-border);
+        padding-bottom: 0.5rem;
+    }
+    
+    .agent-card p {
+        font-size: 1rem;
+    }
+    
+    .workflow-diagram {
+        margin: 2rem auto;
+        text-align: center;
+    }
+    
+    .workflow-diagram img {
+        max-width: 100%;
+        height: auto;
+        border: 1px solid var(--color-border);
+    }
+    
+    .vintage-note {
+        font-style: italic;
+        background-color: #f8f7f1;
+        border: 1px solid #e0ddd5;
+        padding: 1.5rem;
+        margin: 2rem 0;
+        position: relative;
+    }
+    
+    .vintage-note:before {
+        content: '"';
+        font-size: 4rem;
+        color: #d4d0c8;
+        position: absolute;
+        top: -1.5rem;
+        left: 1rem;
+        font-family: Georgia, serif;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="about-content">
+    <section class="about-section">
+        <h2>About FoglioAI</h2>
+        <p>
+            FoglioAI is a unique article generator that creates content in the style of a vintage 1920s newspaper. 
+            Named after the Italian word for "page" or "newspaper," FoglioAI combines modern AI technology with the 
+            aesthetic and journalistic style of the early 20th century press.
+        </p>
+        <p>
+            Unlike conventional AI writing tools, FoglioAI doesn't just generate text – it creates an immersive experience 
+            that transports you back to the Golden Age of journalism. Each article is meticulously crafted in the distinctive 
+            voice and presentation style of 1920s newspapers, complete with period-appropriate terminology, typefaces, and formatting.
+        </p>
+        <div class="vintage-note">
+            <p>
+                "The modern reader deserves both the knowledge of today and the stylistic charm of yesterday's news. 
+                FoglioAI aims to deliver just that – informative content with the timeless elegance of vintage journalism."
+            </p>
+        </div>
+    </section>
+    
+    <section class="about-section">
+        <h2>How It Works</h2>
+        <p>
+            FoglioAI employs a sophisticated multi-agent system powered by Large Language Models to create 
+            comprehensive, well-researched articles on any topic you request. The system works through the 
+            following process:
+        </p>
+        
+        <ol>
+            <li><strong>Query Understanding:</strong> Your question or topic is analyzed to determine the appropriate research approach and article structure.</li>
+            <li><strong>Research & Information Gathering:</strong> Our specialized research agents scour the web for relevant, current information on your topic.</li>
+            <li><strong>Content Creation:</strong> A team of specialized AI agents each contribute their expertise to craft a comprehensive article.</li>
+            <li><strong>Editorial Review:</strong> The article undergoes a rigorous review process to ensure factual accuracy, balance, and cohesive style.</li>
+            <li><strong>Visual Enhancement:</strong> Period-appropriate charts, graphs, and illustrations are generated to complement the text.</li>
+            <li><strong>Vintage Formatting:</strong> The final article is typeset in a authentic 1920s newspaper style, including typography and layout.</li>
+        </ol>
+        
+        <p>
+            The entire process typically takes 1-2 minutes, depending on the complexity of the topic and the amount 
+            of research required. You can watch the progress in real-time as our virtual newsroom works on your article.
+        </p>
+    </section>
+    
+    <section class="about-section">
+        <h2>Meet the Newsroom</h2>
+        <p>
+            FoglioAI's virtual newsroom consists of specialized AI agents, each with a distinct role and expertise:
+        </p>
+        
+        <div class="agent-grid">
+            <div class="agent-card">
+                <h3>Editor</h3>
+                <p>Oversees the entire article creation process, determining structure, assigning tasks to other agents, and ensuring a cohesive final product.</p>
+            </div>
+            <div class="agent-card">
+                <h3>Researcher</h3>
+                <p>Gathers information from multiple sources, evaluates their credibility, and provides factual context for the article.</p>
+            </div>
+            <div class="agent-card">
+                <h3>Writer</h3>
+                <p>Crafts the article text in authentic 1920s journalistic style, focusing on clear storytelling and period-appropriate language.</p>
+            </div>
+            <div class="agent-card">
+                <h3>Historian</h3>
+                <p>Provides historical context and ensures accuracy in references to past events, cultural details, and periodization.</p>
+            </div>
+            <div class="agent-card">
+                <h3>Political Analysts</h3>
+                <p>Offers balanced perspectives from different political viewpoints to ensure comprehensive coverage of political topics.</p>
+            </div>
+            <div class="agent-card">
+                <h3>Graphic Artist</h3>
+                <p>Creates period-appropriate visualizations, charts, and illustrations to enhance understanding of complex topics.</p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="about-section">
+        <h2>Technology</h2>
+        <p>
+            FoglioAI is built on a stack of modern technologies:
+        </p>
+        <ul>
+            <li><strong>Backend:</strong> FastAPI (Python) provides the robust API framework</li>
+            <li><strong>Agent System:</strong> Custom multi-agent architecture with specialized roles</li>
+            <li><strong>AI Models:</strong> Advanced Large Language Models power the research and content generation</li>
+            <li><strong>Visualization:</strong> Matplotlib and AI image generation create period-appropriate visuals</li>
+            <li><strong>Frontend:</strong> HTMX and Alpine.js deliver a responsive, interactive user experience</li>
+            <li><strong>Styling:</strong> Custom CSS with vintage newspaper typography and layout techniques</li>
+        </ul>
+        <p>
+            The system employs a reflection mechanism where agents can critique and improve each other's work, 
+            leading to more accurate, balanced, and comprehensive articles.
+        </p>
+    </section>
+</div>
+{% endblock %} 

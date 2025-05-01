@@ -1,0 +1,326 @@
+{% extends "newspaper/base.html" %}
+
+{% block title %}{{ article.title }} - FoglioAI Gazette{% endblock %}
+
+{% block head %}
+<style>
+    /* Multi-column layout for newspaper articles */
+    .article-container {
+        margin-top: 1rem;
+    }
+    
+    .article-header {
+        text-align: center;
+        margin-bottom: 1.5rem;
+    }
+    
+    .article-date {
+        font-style: italic;
+        color: var(--color-text);
+        margin-bottom: 0.5rem;
+        font-size: 0.85rem;
+    }
+    
+    .article-title {
+        font-size: 1.5rem;
+        line-height: 1.1;
+        margin-bottom: 0.75rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+    }
+    
+    .article-subtitle {
+        font-size: 1.1rem;
+        font-style: italic;
+        color: #444;
+        margin-bottom: 0.75rem;
+    }
+    
+    .article-byline {
+        font-style: italic;
+        margin-bottom: 1rem;
+        font-size: 0.9rem;
+    }
+    
+    .article-content {
+        column-count: 1; /* Mobile first: single column */
+        column-gap: var(--column-gap);
+        margin-bottom: 1.5rem;
+        position: relative;
+    }
+    
+    /* First paragraph styling */
+    .article-content p:first-of-type::first-letter {
+        float: left;
+        font-size: 3rem;
+        line-height: 0.8;
+        padding-right: 0.5rem;
+        padding-top: 0.3rem;
+        font-weight: bold;
+    }
+    
+    .article-content p:first-of-type {
+        font-weight: 600;
+    }
+    
+    /* Pull quotes */
+    .pull-quote {
+        font-family: var(--font-primary);
+        font-size: 1.2rem;
+        font-style: italic;
+        line-height: 1.3;
+        padding: 1rem 0;
+        margin: 1.5rem 0;
+        text-align: center;
+        border-top: 2px solid var(--color-border);
+        border-bottom: 2px solid var(--color-border);
+        column-span: all;
+    }
+    
+    /* Images and captions */
+    .article-figure {
+        margin: 1.5rem 0;
+        column-span: all;
+    }
+    
+    .article-figure img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    .article-figure figcaption {
+        font-style: italic;
+        font-size: 0.85rem;
+        color: #555;
+        text-align: center;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid var(--color-border);
+    }
+    
+    /* Citations */
+    .citations {
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 2px solid var(--color-border);
+    }
+    
+    .citation-list {
+        list-style: none;
+    }
+    
+    .citation {
+        margin-bottom: 1.5rem;
+    }
+    
+    .citation-date {
+        display: block;
+        font-style: italic;
+        color: #666;
+        margin: 0.25rem 0;
+    }
+    
+    .citation-excerpt {
+        font-size: 0.85rem;
+        color: #444;
+        margin-top: 0.5rem;
+        padding-left: 1rem;
+        border-left: 2px solid var(--color-border);
+    }
+
+    /* Continued indicator */
+    .continued {
+        text-align: right;
+        font-style: italic;
+        margin: 1rem 0;
+    }
+    
+    /* Tablet (Small screens) */
+    @media (min-width: 576px) {
+        .article-container {
+            margin-top: 1.5rem;
+        }
+        
+        .article-title {
+            font-size: 1.8rem;
+        }
+        
+        .article-subtitle {
+            font-size: 1.2rem;
+        }
+        
+        .article-content p:first-of-type::first-letter {
+            font-size: 3.2rem;
+        }
+        
+        .pull-quote {
+            font-size: 1.3rem;
+        }
+    }
+    
+    /* Medium screens */
+    @media (min-width: 768px) {
+        .article-container {
+            margin-top: 1.8rem;
+        }
+        
+        .article-header {
+            margin-bottom: 2rem;
+        }
+        
+        .article-title {
+            font-size: 2.2rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .article-subtitle {
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .article-content p:first-of-type::first-letter {
+            font-size: 3.5rem;
+        }
+        
+        .pull-quote {
+            font-size: 1.4rem;
+        }
+        
+        .article-content {
+            column-count: 2; /* Two columns on medium screens */
+        }
+    }
+    
+    /* Large screens */
+    @media (min-width: 992px) {
+        .article-container {
+            margin-top: 2rem;
+        }
+        
+        .article-title {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .article-subtitle {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .article-byline {
+            margin-bottom: 1.5rem;
+        }
+        
+        .article-content p:first-of-type::first-letter {
+            font-size: 4rem;
+        }
+        
+        .pull-quote {
+            font-size: 1.5rem;
+        }
+    }
+    
+    /* Print-specific styles */
+    @media print {
+        .article-content {
+            column-count: 2;
+            column-gap: 1cm;
+            font-size: 11pt;
+        }
+        
+        .article-title {
+            font-size: 24pt;
+        }
+        
+        .article-subtitle {
+            font-size: 16pt;
+        }
+        
+        .article-content p:first-of-type::first-letter {
+            font-size: 36pt;
+        }
+        
+        .pull-quote {
+            font-size: 14pt;
+            page-break-inside: avoid;
+        }
+        
+        .article-figure {
+            page-break-inside: avoid;
+        }
+        
+        .citations {
+            page-break-before: always;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block masthead %}
+    {% include "newspaper/components/masthead.html" with newspaper_name="The FoglioAI Gazette" %}
+{% endblock %}
+
+{% block content %}
+<article class="article-container">
+    <header class="article-header">
+        <div class="article-date">{{ article.created_at|date:"l, F j, Y" }}</div>
+        <h1 class="article-title headline">{{ article.title }}</h1>
+        {% if article.subtitle %}
+            <div class="article-subtitle subheadline">{{ article.subtitle }}</div>
+        {% endif %}
+        <div class="article-byline byline">By {{ article.author|default:"FoglioAI Correspondent" }}</div>
+    </header>
+
+    <div class="article-content">
+        {% if article.content_blocks %}
+            {% for block in article.content_blocks %}
+                {% if block.type == 'paragraph' %}
+                    <p {% if forloop.first %}class="drop-cap"{% endif %}>{{ block.content|safe }}</p>
+                {% elif block.type == 'heading' %}
+                    <h2>{{ block.content|safe }}</h2>
+                {% elif block.type == 'subheading' %}
+                    <h3>{{ block.content|safe }}</h3>
+                {% elif block.type == 'quote' %}
+                    <blockquote class="pull-quote">{{ block.content|safe }}</blockquote>
+                {% elif block.type == 'image' %}
+                    <figure class="article-figure">
+                        <img src="{{ block.src }}" alt="{{ block.alt }}">
+                        {% if block.caption %}
+                            <figcaption class="caption">{{ block.caption|safe }}</figcaption>
+                        {% endif %}
+                    </figure>
+                {% endif %}
+            {% endfor %}
+        {% else %}
+            <!-- Fallback for older format or direct content -->
+            {{ article.content|safe }}
+        {% endif %}
+    </div>
+
+    {% if article.continued_on %}
+        <div class="continued text-right italic">
+            Continued on page {{ article.continued_on }}
+        </div>
+    {% endif %}
+
+    {% if article.sources and article.show_sources %}
+        <section class="citations">
+            <h3 class="small-caps letter-spacing-wide">Sources & References</h3>
+            <ul class="citation-list">
+                {% for source in article.sources %}
+                    <li class="citation">
+                        <a href="{{ source.url }}" target="_blank">{{ source.title }}</a>
+                        <span class="citation-date">{{ source.published_at|date:"F j, Y" }}</span>
+                        {% if source.excerpt %}
+                            <blockquote class="citation-excerpt">{{ source.excerpt }}</blockquote>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+            </ul>
+        </section>
+    {% endif %}
+</article>
+
+<div class="article-divider"></div>
+{% endblock %} 

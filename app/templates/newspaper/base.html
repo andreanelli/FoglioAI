@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, minimum-scale=1.0">
+    <title>{% block title %}FoglioAI - Vintage Newspaper{% endblock %}</title>
+    
+    <!-- Preconnect to Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- Load Old Standard TT font -->
+    <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    
+    <!-- Base CSS -->
+    <link rel="stylesheet" href="/static/css/vintage-newspaper.css">
+    
+    <!-- Typography CSS -->
+    <link rel="stylesheet" href="/static/css/typography.css">
+    
+    <!-- Font loading script (inline for critical loading performance) -->
+    <script>
+        // Apply fonts-loaded class if previously cached
+        try {
+            if (localStorage.getItem('fonts-loaded')) {
+                document.documentElement.classList.add('fonts-loaded');
+            }
+        } catch (e) {}
+    </script>
+    
+    {% block head %}{% endblock %}
+</head>
+<body>
+    <div class="newspaper">
+        <!-- Paper texture and edges for vintage effect -->
+        <div class="paper-texture"></div>
+        <div class="paper-edge paper-edge-top"></div>
+        <div class="paper-edge paper-edge-bottom"></div>
+        <div class="paper-edge paper-edge-left"></div>
+        <div class="paper-edge paper-edge-right"></div>
+        
+        <div class="content-container">
+            {% block masthead %}
+                {% include "newspaper/components/masthead.html" %}
+            {% endblock %}
+            
+            <main>
+                {% block content %}{% endblock %}
+            </main>
+            
+            <footer>
+                {% block footer %}
+                <p class="text-center">
+                    © {% now 'Y' %} FoglioAI - Vintage Newspaper Generator
+                </p>
+                {% endblock %}
+            </footer>
+        </div>
+    </div>
+
+    <!-- Font loader script (non-blocking) -->
+    <script src="/static/js/font-loader.js" defer></script>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html> 

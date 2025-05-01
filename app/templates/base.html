@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{% block title %}FoglioAI - Vintage Newspaper{% endblock %}</title>
+    <title>{% block title %}FoglioAI - Vintage Newspaper Articles{% endblock %}</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', path='/css/vintage-newspaper.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', path='/img/favicon.png') }}">
     <style>
         /* Base styles */
         :root {
@@ -159,27 +161,32 @@
     {% block head %}{% endblock %}
 </head>
 <body>
-    <div class="container">
-        <nav>
-            <ul>
-                <li><a href="/">Home</a></li>
-                <li><a href="/articles">Articles</a></li>
-                <li><a href="/about">About</a></li>
+    <nav class="main-nav">
+        <div class="container">
+            <ul class="nav-list">
+                <li class="nav-item"><a href="/" class="nav-link">Home</a></li>
+                <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="/articles" class="nav-link">Articles</a></li>
             </ul>
-        </nav>
+        </div>
+    </nav>
 
-        <main>
+    <div class="container">
+        <div class="content-wrapper">
             {% block content %}{% endblock %}
-        </main>
-
-        <footer>
-            {% block footer %}
-            <p class="text-center mt-4 text-sm">
-                © {% now 'Y' %} FoglioAI - Vintage Newspaper Generator
-            </p>
-            {% endblock %}
-        </footer>
+        </div>
     </div>
+
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-links">
+                <a href="/" class="footer-link">Home</a>
+                <a href="/about" class="footer-link">About</a>
+                <a href="/articles" class="footer-link">Articles</a>
+            </div>
+            <p class="copyright">© {% now 'Y' %} FoglioAI - Vintage Newspaper-Style Article Generator</p>
+        </div>
+    </footer>
 
     {% block scripts %}{% endblock %}
 </body>

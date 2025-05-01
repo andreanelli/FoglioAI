@@ -53,15 +53,15 @@ def get_rate_limiter(times: int = 10, minutes: int = 1) -> RateLimiter:
 @router.post("/api/compose", response_model=ComposeResponse)
 async def start_article_generation(
     request: ComposeRequest,
+    fastapi_request: Request,
     rate_limiter: RateLimiter = Depends(get_rate_limiter),
-    fastapi_request: Optional[Request] = None,
 ) -> ComposeResponse:
     """Start article generation.
 
     Args:
         request (ComposeRequest): Article generation request
+        fastapi_request (Request, optional): FastAPI request object. Defaults to Depends().
         rate_limiter (RateLimiter, optional): Rate limiter instance. Defaults to Depends(get_rate_limiter).
-        fastapi_request (Optional[Request], optional): FastAPI request object. Defaults to None.
 
     Returns:
         ComposeResponse: Response with article ID
@@ -69,7 +69,7 @@ async def start_article_generation(
     Raises:
         HTTPException: If article generation fails to start or rate limit is exceeded
     """
-    await rate_limiter(fastapi_request or "compose")  # Apply rate limiting
+    await rate_limiter(fastapi_request)
     try:
         article_id = await service.start_generation(request.topic, request.style_guide)
         return ComposeResponse(article_id=article_id)
@@ -80,15 +80,15 @@ async def start_article_generation(
 @router.get("/api/compose/{article_id}", response_model=ArticleStatusResponse)
 async def get_article_status(
     article_id: UUID,
+    fastapi_request: Request,
     rate_limiter: RateLimiter = Depends(get_rate_limiter),
-    fastapi_request: Optional[Request] = None,
 ) -> ArticleStatusResponse:
     """Get article generation status.
 
     Args:
         article_id (UUID): ID of the article
+        fastapi_request (Request, optional): FastAPI request object. Defaults to Depends().
         rate_limiter (RateLimiter, optional): Rate limiter instance. Defaults to Depends(get_rate_limiter).
-        fastapi_request (Optional[Request], optional): FastAPI request object. Defaults to None.
 
     Returns:
         ArticleStatusResponse: Article status response
@@ -96,7 +96,7 @@ async def get_article_status(
     Raises:
         HTTPException: If article not found or rate limit is exceeded
     """
-    await rate_limiter(fastapi_request or "status")  # Apply rate limiting
+    await rate_limiter(fastapi_request)
     try:
         article_run = await get_article_run(article_id)
         if not article_run:
@@ -115,15 +115,15 @@ async def get_article_status(
 @router.get("/api/compose/{article_id}/html", response_class=HTMLResponse)
 async def get_article_html(
     article_id: UUID,
+    fastapi_request: Request,
     rate_limiter: RateLimiter = Depends(get_rate_limiter),
-    fastapi_request: Optional[Request] = None,
 ) -> str:
     """Get article HTML.
 
     Args:
         article_id (UUID): ID of the article
+        fastapi_request (Request, optional): FastAPI request object. Defaults to Depends().
         rate_limiter (RateLimiter, optional): Rate limiter instance. Defaults to Depends(get_rate_limiter).
-        fastapi_request (Optional[Request], optional): FastAPI request object. Defaults to None.
 
     Returns:
         str: Article HTML
@@ -131,7 +131,7 @@ async def get_article_html(
     Raises:
         HTTPException: If article not found, not ready, or rate limit is exceeded
     """
-    await rate_limiter(fastapi_request or "html")  # Apply rate limiting
+    await rate_limiter(fastapi_request)
     try:
         article_run = await get_article_run(article_id)
         if not article_run:
@@ -164,7 +164,7 @@ async def subscribe_to_article_events(
     Raises:
         HTTPException: If the article generation times out or rate limit is exceeded
     """
-    await rate_limiter(request or "events")  # Apply rate limiting
+    await rate_limiter(request)  # Apply rate limiting
 
     async def event_generator() -> AsyncGenerator[Dict[str, str], None]:
         """Generate SSE events.

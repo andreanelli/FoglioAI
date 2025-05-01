@@ -1,0 +1,140 @@
+<div class="masthead">
+    <div class="masthead-border"></div>
+    <div class="newspaper-name">{{ newspaper_name|default:"The FoglioAI Gazette" }}</div>
+    <div class="masthead-date">{{ publication_date|default:now|date:"l, F j, Y" }}</div>
+    <div class="masthead-edition">{{ edition|default:"Morning Edition" }}</div>
+    <div class="masthead-price">{{ price|default:"PRICE: TWO CENTS" }}</div>
+    <div class="masthead-border"></div>
+</div>
+
+<style>
+    .masthead {
+        margin-bottom: 1rem;
+        text-align: center;
+        position: relative;
+    }
+    
+    .masthead-border {
+        height: 2px;
+        background-color: black;
+        margin: 6px 0;
+    }
+    
+    .newspaper-name {
+        font-family: var(--font-primary);
+        font-size: 2rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: -0.01em;
+        line-height: 1;
+        margin: 0.5rem 0;
+        color: var(--header-color);
+        text-shadow: 1px 1px 0 rgba(0,0,0,0.05);
+    }
+    
+    .masthead-date {
+        font-style: italic;
+        margin-bottom: 0.25rem;
+        font-size: 0.8rem;
+    }
+    
+    .masthead-edition {
+        font-size: 0.8rem;
+        margin-bottom: 0.25rem;
+        font-weight: bold;
+    }
+    
+    .masthead-price {
+        font-size: 0.7rem;
+        font-weight: bold;
+        margin-bottom: 0.25rem;
+    }
+    
+    /* Tablet (Small screens) */
+    @media (min-width: 576px) {
+        .masthead {
+            margin-bottom: 1.2rem;
+        }
+        
+        .masthead-border {
+            height: 2px;
+            margin: 7px 0;
+        }
+        
+        .newspaper-name {
+            font-size: 2.5rem;
+            margin: 0.6rem 0;
+        }
+        
+        .masthead-date, 
+        .masthead-edition {
+            font-size: 0.85rem;
+            margin-bottom: 0.3rem;
+        }
+        
+        .masthead-price {
+            font-size: 0.75rem;
+            margin-bottom: 0.3rem;
+        }
+    }
+    
+    /* Medium screens */
+    @media (min-width: 768px) {
+        .masthead {
+            margin-bottom: 1.3rem;
+        }
+        
+        .masthead-border {
+            height: 3px;
+            margin: 8px 0;
+        }
+        
+        .newspaper-name {
+            font-size: 3rem;
+            margin: 0.65rem 0;
+        }
+        
+        .masthead-date, 
+        .masthead-edition {
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+        }
+        
+        .masthead-price {
+            font-size: 0.8rem;
+            margin-bottom: 0.4rem;
+        }
+    }
+    
+    /* Large screens */
+    @media (min-width: 992px) {
+        .masthead {
+            margin-bottom: 1.5rem;
+        }
+        
+        .newspaper-name {
+            font-size: 4rem;
+            margin: 0.75rem 0;
+        }
+        
+        .masthead-date {
+            margin-bottom: 0.5rem;
+        }
+        
+        .masthead-edition {
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .masthead-price {
+            font-size: 0.8rem;
+            margin-bottom: 0.5rem;
+        }
+    }
+    
+    @media print {
+        .masthead {
+            margin-bottom: 1cm;
+        }
+    }
+</style> 

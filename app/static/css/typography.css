@@ -1,0 +1,321 @@
+/* Typography System for FoglioAI - Vintage 1920s Newspaper */
+
+/* Font Face Definitions */
+@font-face {
+  font-family: 'Old Standard TT';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/oldstandardtt/v18/MwQubh3o1vLImiwAVvYawgcf2eVep1q4ZnRSZ.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Old Standard TT';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/oldstandardtt/v18/MwQsbh3o1vLImiwAVvYawgcf2eVer2q6bHNSZg.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: 'Old Standard TT';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/oldstandardtt/v18/MwQrbh3o1vLImiwAVvYawgcf2eVWEX-tRlZfS.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Typographic Variables */
+:root {
+  /* Font Family */
+  --font-primary: 'Old Standard TT', 'Times New Roman', Georgia, serif;
+  --font-fallback: 'Times New Roman', Georgia, serif;
+  
+  /* Base Typography */
+  --base-font-size: 1rem; /* 16px */
+  --base-line-height: 1.6;
+  
+  /* Typographic Scale (based on a 1.2 ratio) */
+  --text-xs: 0.694rem;    /* ~11px */
+  --text-sm: 0.833rem;    /* ~13px */
+  --text-base: 1rem;      /* 16px */
+  --text-md: 1.2rem;      /* ~19px */
+  --text-lg: 1.44rem;     /* ~23px */
+  --text-xl: 1.728rem;    /* ~28px */
+  --text-2xl: 2.074rem;   /* ~33px */
+  --text-3xl: 2.488rem;   /* ~40px */
+  --text-4xl: 2.986rem;   /* ~48px */
+  --text-5xl: 3.583rem;   /* ~57px */
+  
+  /* Vertical Rhythm */
+  --spacing-xs: 0.5rem;   /* 8px */
+  --spacing-sm: 0.75rem;  /* 12px */
+  --spacing-md: 1rem;     /* 16px */
+  --spacing-lg: 1.5rem;   /* 24px */
+  --spacing-xl: 2rem;     /* 32px */
+  --spacing-2xl: 3rem;    /* 48px */
+  
+  /* Letter Spacing */
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0em;
+  --letter-spacing-wide: 0.025em;
+  --letter-spacing-wider: 0.05em;
+  --letter-spacing-widest: 0.1em;
+  
+  /* Font Weights */
+  --font-weight-normal: 400;
+  --font-weight-bold: 700;
+}
+
+/* Base Typography Styles */
+html {
+  font-size: 100%; /* Maintains 16px as base font size */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-primary);
+  font-size: var(--base-font-size);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--base-line-height);
+}
+
+/* Headings */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-primary);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.2;
+  margin-top: 0;
+  margin-bottom: var(--spacing-lg);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+h1 {
+  font-size: var(--text-3xl);
+  text-transform: uppercase;
+}
+
+h2 {
+  font-size: var(--text-2xl);
+}
+
+h3 {
+  font-size: var(--text-xl);
+}
+
+h4 {
+  font-size: var(--text-lg);
+}
+
+h5 {
+  font-size: var(--text-md);
+}
+
+h6 {
+  font-size: var(--text-base);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-widest);
+}
+
+/* Paragraph and Text */
+p {
+  margin-bottom: var(--spacing-md);
+  text-align: justify;
+  hyphens: auto;
+}
+
+/* Use true small caps when available */
+.small-caps {
+  font-variant: small-caps;
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* First paragraph styling */
+.lead, p.lead, .article-content p:first-of-type {
+  font-size: var(--text-md);
+  line-height: 1.5;
+  margin-bottom: var(--spacing-lg);
+}
+
+/* Drop Caps */
+.drop-cap:first-letter,
+.article-content p:first-of-type:first-letter {
+  float: left;
+  font-size: 4em;
+  line-height: 0.8;
+  font-weight: var(--font-weight-bold);
+  margin-right: 0.15em;
+  padding-top: 0.15em;
+}
+
+/* Typographic Flourishes */
+.headline {
+  text-align: center;
+  font-size: var(--text-3xl);
+  line-height: 1.1;
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-tight);
+  margin-bottom: var(--spacing-lg);
+}
+
+.subheadline {
+  text-align: center;
+  font-size: var(--text-lg);
+  font-style: italic;
+  margin-bottom: var(--spacing-xl);
+}
+
+.byline {
+  font-style: italic;
+  text-align: center;
+  font-size: var(--text-sm);
+  margin-bottom: var(--spacing-lg);
+}
+
+.dateline {
+  font-variant: small-caps;
+  letter-spacing: var(--letter-spacing-wide);
+  font-size: var(--text-sm);
+  margin-bottom: var(--spacing-md);
+}
+
+.pull-quote {
+  font-size: var(--text-lg);
+  line-height: 1.4;
+  font-style: italic;
+  padding: var(--spacing-lg) var(--spacing-lg);
+  margin: var(--spacing-xl) 0;
+  text-align: center;
+  position: relative;
+}
+
+.pull-quote::before,
+.pull-quote::after {
+  content: """;
+  font-family: var(--font-primary);
+  font-size: 3em;
+  position: absolute;
+  color: rgba(0, 0, 0, 0.1);
+}
+
+.pull-quote::before {
+  top: -0.2em;
+  left: 0;
+}
+
+.pull-quote::after {
+  content: """;
+  bottom: -0.6em;
+  right: 0;
+}
+
+/* Caption styles */
+figcaption, .caption {
+  font-size: var(--text-sm);
+  font-style: italic;
+  text-align: center;
+  margin-top: var(--spacing-sm);
+  color: #666;
+}
+
+/* Citations */
+.citation {
+  font-size: var(--text-sm);
+  border-left: 2px solid #ddd;
+  padding-left: var(--spacing-md);
+  margin: var(--spacing-md) 0;
+}
+
+/* Utility classes */
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+.italic { font-style: italic; }
+.bold { font-weight: var(--font-weight-bold); }
+.uppercase { text-transform: uppercase; }
+.letter-spacing-tight { letter-spacing: var(--letter-spacing-tight); }
+.letter-spacing-wide { letter-spacing: var(--letter-spacing-wide); }
+
+/* Font loading strategy */
+.fonts-loaded body {
+  font-family: var(--font-primary);
+}
+
+/* For browsers without JS or for immediate rendering */
+.no-js body {
+  font-family: var(--font-primary);
+}
+
+/* Responsive typography */
+@media (min-width: 576px) {
+  :root {
+    --base-font-size: 1.05rem;
+  }
+}
+
+@media (min-width: 768px) {
+  :root {
+    --base-font-size: 1.1rem;
+  }
+  
+  h1 {
+    font-size: var(--text-4xl);
+  }
+  
+  .headline {
+    font-size: var(--text-4xl);
+  }
+}
+
+@media (min-width: 992px) {
+  :root {
+    --base-font-size: 1.15rem;
+  }
+  
+  h1 {
+    font-size: var(--text-5xl);
+  }
+  
+  .headline {
+    font-size: var(--text-5xl);
+  }
+  
+  .drop-cap:first-letter,
+  .article-content p:first-of-type:first-letter {
+    font-size: 5em;
+  }
+}
+
+/* Print styles */
+@media print {
+  :root {
+    --base-font-size: 11pt;
+  }
+  
+  body {
+    font-size: var(--base-font-size);
+    line-height: 1.5;
+  }
+  
+  h1 {
+    font-size: 24pt;
+  }
+  
+  h2 {
+    font-size: 18pt;
+  }
+  
+  h3 {
+    font-size: 14pt;
+  }
+  
+  .drop-cap:first-letter,
+  .article-content p:first-of-type:first-letter {
+    font-size: 36pt;
+  }
+} 

@@ -7,7 +7,7 @@ from uuid import UUID
 from app.agents import AgentConfig, BaseAgent
 from app.models.agent import AgentRole
 from app.models.article import Article, ArticleOutline, ArticleSection
-from app.models.article_run import ArticleRun, ArticleStatus
+from app.models.article_run import ArticleRun, ArticleRunStatus
 from app.pubsub.scratchpad import (
     Message, 
     MessageType, 
@@ -348,7 +348,7 @@ class EditorAgent(BaseAgent):
         logger.info("Starting reflection phase for article %s", self.article_id)
         
         # Update article status
-        self.article_run.status = ArticleStatus.REFLECTING
+        self.article_run.status = ArticleRunStatus.REFLECTING
         save_article_run(self.article_run)
         
         # Get all memos for this article
@@ -499,7 +499,7 @@ class EditorAgent(BaseAgent):
         self._reflection_phase_complete = True
         
         # Update article status
-        self.article_run.status = ArticleStatus.SYNTHESIZING
+        self.article_run.status = ArticleRunStatus.SYNTHESIZING
         self.article_run.metadata["reflection_complete"] = True
         save_article_run(self.article_run)
         
@@ -533,7 +533,7 @@ class EditorAgent(BaseAgent):
         # 4. Ensuring politically sensitive topics have fair coverage
         
         # For now, update the article status to complete
-        self.article_run.status = ArticleStatus.COMPLETED
+        self.article_run.status = ArticleRunStatus.COMPLETED
         save_article_run(self.article_run)
         
         logger.info("Article synthesis complete: %s", self.article_id)

@@ -43,7 +43,7 @@ class TestRateLimiter(RateLimiter):
         else:
             key = "default"
 
-        now = datetime.now()
+        now = datetime.now().replace(second=0, microsecond=0)
         window_start = now - timedelta(minutes=self.minutes)
 
         # Clean up old entries
@@ -63,7 +63,7 @@ class TestRateLimiter(RateLimiter):
             )
 
         # Record this request
-        TestRateLimiter._requests[key][now] += 1
+        TestRateLimiter._requests[key][now] = TestRateLimiter._requests[key].get(now, 0) + 1
         return True
 
     def _cleanup_old_requests(self, key: str, window_start: datetime) -> None:

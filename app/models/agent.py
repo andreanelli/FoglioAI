@@ -19,6 +19,8 @@ class AgentRole(str, Enum):
     GEOPOLITICS = "geopolitics"
     EDITOR = "editor"
     GRAPHIC_ARTIST = "graphic_artist"
+    WRITER = "writer"
+    RESEARCHER = "researcher"
 
 
 class AgentMemo(BaseModelWithId):

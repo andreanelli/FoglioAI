@@ -1,0 +1,334 @@
+{% extends "base.html" %}
+
+{% block title %}FoglioAI - Vintage Newspaper Article Generator{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', path='/css/vintage-newspaper.css') }}">
+<script src="https://unpkg.com/htmx.org@1.9.3"></script>
+<script src="https://unpkg.com/alpinejs@3.13.0" defer></script>
+<style>
+    .headline {
+        font-size: 4rem;
+        line-height: 1;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        margin-bottom: 2rem;
+    }
+    
+    .subheadline {
+        font-size: 1.5rem;
+        font-style: italic;
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    .query-form {
+        max-width: 800px;
+        margin: 0 auto 3rem;
+        padding: 2rem;
+        border: 1px solid var(--color-border);
+        background-color: #fcfbf8;
+    }
+    
+    .query-form label {
+        display: block;
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+    
+    .query-form textarea {
+        width: 100%;
+        min-height: 150px;
+        padding: 1rem;
+        font-family: var(--font-primary);
+        font-size: 1.1rem;
+        border: 1px solid var(--color-border);
+        margin-bottom: 1.5rem;
+        resize: vertical;
+    }
+    
+    .query-form button {
+        background-color: var(--color-accent);
+        color: white;
+        font-family: var(--font-primary);
+        font-size: 1.2rem;
+        padding: 0.75rem 2rem;
+        border: none;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+    
+    .query-form button:hover {
+        background-color: #6b0000;
+    }
+    
+    .query-form .error {
+        color: var(--color-accent);
+        font-style: italic;
+        margin-top: 0.5rem;
+    }
+    
+    .loading-screen {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(255, 255, 255, 0.9);
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+    
+    .loading-content {
+        max-width: 600px;
+        text-align: center;
+    }
+    
+    .loading-title {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+    }
+    
+    .loading-notes {
+        font-style: italic;
+        margin-top: 2rem;
+        padding: 1rem;
+        border: 1px solid var(--color-border);
+        background-color: #fcfbf8;
+        max-height: 200px;
+        overflow-y: auto;
+        text-align: left;
+    }
+    
+    .loading-progress {
+        width: 100%;
+        height: 20px;
+        background-color: #f0f0f0;
+        margin: 1rem 0;
+        position: relative;
+    }
+    
+    .loading-progress-bar {
+        height: 100%;
+        background-color: var(--color-accent);
+        width: 0%;
+        transition: width 0.5s;
+    }
+    
+    .sample-articles {
+        margin-top: 4rem;
+    }
+    
+    .sample-articles h2 {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    .article-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+    
+    .article-card {
+        border: 1px solid var(--color-border);
+        padding: 1.5rem;
+        background-color: white;
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .article-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .article-card h3 {
+        font-size: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .article-card .date {
+        font-style: italic;
+        color: #666;
+        margin-bottom: 1rem;
+    }
+    
+    .article-card .excerpt {
+        margin-bottom: 1.5rem;
+    }
+    
+    .article-card .read-more {
+        display: inline-block;
+        color: var(--color-accent);
+        font-weight: bold;
+    }
+    
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+        .headline {
+            font-size: 2.5rem;
+        }
+        
+        .subheadline {
+            font-size: 1.2rem;
+        }
+        
+        .query-form {
+            padding: 1rem;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<header>
+    <h1 class="headline">FoglioAI</h1>
+    <p class="subheadline">Vintage Newspaper-Style Article Generator</p>
+</header>
+
+<section class="query-form" x-data="{ query: '', isValid: false, error: '' }">
+    <form 
+        hx-post="/api/articles/compose" 
+        hx-trigger="submit" 
+        hx-target="#article-container" 
+        hx-swap="innerHTML"
+        hx-indicator=".loading-screen"
+        @submit="$event.preventDefault(); 
+                 if(query.trim().length < 10) {
+                     error = 'Please enter a more detailed query (at least 10 characters).'; 
+                     return false;
+                 } 
+                 error = ''; 
+                 document.querySelector('.loading-screen').style.display = 'flex';
+                 htmx.trigger('#compose-form', 'submit', {});
+                 return false;"
+        id="compose-form"
+    >
+        <label for="query">What would you like to know about?</label>
+        <textarea 
+            id="query" 
+            name="query" 
+            placeholder="Ask any question or provide a topic for an article... (e.g., 'How did the 1929 stock market crash affect American society?')"
+            x-model="query"
+            @input="isValid = query.trim().length >= 10; error = '';"
+            required
+        ></textarea>
+        <div x-show="error" x-text="error" class="error"></div>
+        <button type="submit" x-bind:disabled="!isValid">Generate Article</button>
+    </form>
+</section>
+
+<div id="article-container"></div>
+
+<div class="loading-screen" style="display: none;" x-data="{ notes: [], progress: 0 }" 
+     @htmx:xhr:progress="progress = $event.detail.loaded / $event.detail.total * 100 || progress"
+     @htmx:trigger="document.addEventListener('agent-progress', (e) => { notes.push(e.detail.message); progress = e.detail.progress || progress; })"
+>
+    <div class="loading-content">
+        <h2 class="loading-title">The Newsroom is Working...</h2>
+        <div class="loading-progress">
+            <div class="loading-progress-bar" x-bind:style="'width: ' + progress + '%'"></div>
+        </div>
+        <p>Our agents are researching, writing, and typesetting your article.</p>
+        <div class="loading-notes" x-show="notes.length > 0">
+            <template x-for="note in notes">
+                <p x-text="note"></p>
+            </template>
+        </div>
+    </div>
+</div>
+
+<section class="sample-articles">
+    <h2>Recent Articles</h2>
+    <div class="article-grid">
+        {% for article in recent_articles %}
+        <div class="article-card">
+            <div class="date">{{ article.created_at|date:"F j, Y" }}</div>
+            <h3>{{ article.title }}</h3>
+            <div class="excerpt">{{ article.excerpt }}</div>
+            <a href="/articles/{{ article.id }}" class="read-more">Read Full Article</a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Event source for SSE updates
+    function setupEventSource(articleId) {
+        const eventSource = new EventSource(`/api/articles/${articleId}/stream`);
+        
+        eventSource.onmessage = function(event) {
+            const data = JSON.parse(event.data);
+            
+            // Dispatch custom event for progress updates
+            if (data.type === 'progress' || data.type === 'agent_progress') {
+                document.dispatchEvent(new CustomEvent('agent-progress', {
+                    detail: {
+                        message: data.message || data.content,
+                        progress: data.progress || null
+                    }
+                }));
+            }
+            
+            // When complete, redirect to the article
+            if (data.type === 'completed') {
+                eventSource.close();
+                window.location.href = `/articles/${articleId}`;
+            }
+            
+            // Handle errors
+            if (data.type === 'error') {
+                document.dispatchEvent(new CustomEvent('agent-progress', {
+                    detail: {
+                        message: `Error: ${data.message || data.content}`,
+                        progress: 100
+                    }
+                }));
+                setTimeout(() => {
+                    eventSource.close();
+                    document.querySelector('.loading-screen').style.display = 'none';
+                }, 3000);
+            }
+        };
+        
+        eventSource.onerror = function() {
+            document.dispatchEvent(new CustomEvent('agent-progress', {
+                detail: {
+                    message: "Connection to server lost. The article is still being generated, but updates will not be displayed.",
+                    progress: null
+                }
+            }));
+            eventSource.close();
+        };
+        
+        return eventSource;
+    }
+    
+    // HTMX event handlers
+    document.addEventListener('htmx:afterRequest', function(event) {
+        if (event.detail.successful && event.detail.xhr.responseURL.includes('/api/articles/compose')) {
+            try {
+                const response = JSON.parse(event.detail.xhr.responseText);
+                if (response.article_id) {
+                    setupEventSource(response.article_id);
+                }
+            } catch (e) {
+                console.error('Failed to parse response:', e);
+            }
+        }
+    });
+    
+    document.addEventListener('htmx:responseError', function(event) {
+        document.querySelector('.loading-screen').style.display = 'none';
+        const errorMessage = event.detail.xhr.responseText || 'An error occurred while generating your article.';
+        document.getElementById('article-container').innerHTML = `<div class="error">${errorMessage}</div>`;
+    });
+</script>
+{% endblock %} 

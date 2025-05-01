@@ -30,6 +30,14 @@ class MessageType(str, enum.Enum):
     REFLECTION_SUMMARY = "reflection_summary"
     EDITOR_FEEDBACK = "editor_feedback"
     BIAS_ALERT = "bias_alert"
+    # Visual asset message types
+    VISUAL_REQUEST = "visual_request"
+    VISUAL_ADDED = "visual_added"
+    VISUAL_UPDATED = "visual_updated"
+    VISUAL_REMOVED = "visual_removed"
+    AGENT_PROGRESS = "agent_progress"
+    AGENT_COMPLETED = "agent_completed"
+    AGENT_ERROR = "agent_error"
 
 
 class ReflectionStatus(str, enum.Enum):

@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Page Not Found - FoglioAI{% endblock %}
+
+{% block head %}
+<style>
+    .error-container {
+        max-width: 800px;
+        margin: 2rem auto;
+        padding: 2rem;
+        border: 2px solid var(--color-border);
+        text-align: center;
+    }
+    
+    .error-headline {
+        font-size: 3rem;
+        text-transform: uppercase;
+        margin-bottom: 1.5rem;
+        line-height: 1.2;
+    }
+    
+    .error-subheadline {
+        font-size: 1.5rem;
+        font-style: italic;
+        margin-bottom: 2rem;
+    }
+    
+    .error-content {
+        margin-bottom: 2rem;
+    }
+    
+    .error-code {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        background-color: var(--color-border);
+        font-family: monospace;
+        margin: 1rem 0;
+    }
+    
+    .error-image {
+        max-width: 400px;
+        margin: 0 auto;
+        opacity: 0.6;
+    }
+    
+    .btn-home {
+        display: inline-block;
+        background-color: var(--color-accent);
+        color: white;
+        padding: 0.75rem 2rem;
+        font-size: 1.2rem;
+        text-decoration: none;
+        margin-top: 1rem;
+        transition: background-color 0.3s;
+    }
+    
+    .btn-home:hover {
+        background-color: #6b0000;
+        text-decoration: none;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="error-container">
+    <h1 class="error-headline">Extra! Extra! Page Not Found!</h1>
+    <p class="error-subheadline">Our press boys searched high and low, but couldn't find what you're looking for</p>
+    
+    <div class="error-content">
+        <p>The page you requested seems to have been misplaced, or perhaps it was never printed to begin with.</p>
+        <div class="error-code">404 - Page Not Found</div>
+        <p>Why not return to our front page and browse our latest headlines?</p>
+    </div>
+    
+    <a href="/" class="btn-home">Return to Front Page</a>
+</div>
+{% endblock %} 

@@ -3,6 +3,7 @@
 from app.agents.base import AgentConfig, BaseAgent
 from app.agents.editor import EditorAgent
 from app.agents.geopolitics import GeopoliticsAgent
+from app.agents.graphic_artist import GraphicArtistAgent
 from app.agents.historian import HistorianAgent
 from app.agents.orchestrator import ArticleOrchestrator
 from app.agents.politics_left import PoliticsLeftAgent
@@ -15,6 +16,7 @@ __all__ = [
     "BaseAgent",
     "EditorAgent",
     "GeopoliticsAgent",
+    "GraphicArtistAgent",
     "HistorianAgent",
     "PoliticsLeftAgent",
     "PoliticsRightAgent",
