@@ -1,0 +1,7 @@
+# roadmap.yaml (TaskMaster input)
+- epic: Phase 1 – Text-Only Pipeline
+  tasks:
+    - Create /compose endpoint
+    - Implement Orchestrator with 3 agents
+    - Build Jinja template newspaper.html
+
